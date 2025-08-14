@@ -10,8 +10,10 @@ import (
 )
 
 func main() {
+	var c registry.Config
+
 	for {
-		fmt.Print("GoCLI > ")
+		fmt.Print("Pokedex > ")
 		scn := bufio.NewScanner(os.Stdin)
 
 		if scn.Scan() {
@@ -22,7 +24,7 @@ func main() {
 			if !ok {
 				fmt.Printf("Unknown command %s\n", val)
 			} else {
-				err := command.Callback()
+				err := command.Callback(&c)
 
 				if err != nil {
 					fmt.Printf("Error while running command %s: %v\n", command.Name, err)
