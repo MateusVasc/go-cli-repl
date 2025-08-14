@@ -1,48 +1,34 @@
 package registry
 
-import (
-	"fmt"
-	"os"
-)
-
 type cliCommand struct {
 	Name        string
 	Description string
-	Callback    func() error
+	Callback    func(c *Config) error
+}
+
+type Config struct {
+	Next     string
+	Previous string
 }
 
 var Commands map[string]cliCommand
-
-func commandExit() error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-
-	return nil
-}
-
-func commandHelp() error {
-	fmt.Println("Welcome to the Pokedex!")
-	fmt.Println("Usage:")
-	fmt.Println("")
-
-	for _, val := range Commands {
-		fmt.Printf("%v: %s\n", val.Name, val.Description)
-	}
-
-	return nil
-}
 
 func init() {
 	Commands = map[string]cliCommand{
 		"exit": {
 			Name:        "exit",
 			Description: "Exit the Pokedex",
-			Callback:    commandExit,
+			Callback:    func(c *Config) error { return commandExit(c) },
 		},
 		"help": {
 			Name:        "help",
 			Description: "Displays a help message",
-			Callback:    commandHelp,
+			Callback:    func(c *Config) error { return commandHelp(c) },
+		},
+		"map": {
+			Name:        "map",
+			Description: "Displays the names of 20 location areas in the Pokemon world",
+			Callback:    func(c *Config) error { return commandMap(c) },
 		},
 	}
 }
